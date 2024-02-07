@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+
+  tortoisebot_ros2_gazebo:
+    image: romu10/romuloperez-cp22:tortoisebot-ros2-gazebo
+    container_name: tortoisebot_ros2_gazebo
+    restart: "no"
+    environment:
+      - DISPLAY
+      - ROS_MASTER_URI=http://localhost:11311
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    stdin_open: true
+    tty: true
+    networks:
+      - ros
+    hostname: tortoisebot_ros2_gazebo
+    command: bash -c "source ros2_ws/install/setup.bash && ros2 launch tortoisebot_bringup bringup.launch.py use_sim_time:=True"
+
+  tortoisebot_ros2_slam:
+    image: romu10/romuloperez-cp22:tortoisebot-ros2-slam
+    container_name: tortoisebot_ros2_slam
+    restart: "no"
+    environment:
+      - DISPLAY
+      - ROS_MASTER_URI=http://localhost:11311
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    stdin_open: true
+    tty: true
+    networks:
+      - ros
+    depends_on:
+      - tortoisebot_ros2_gazebo
+    hostname: tortoisebot_ros2_slam 
+    command: bash -c "source ros2_ws/install/setup.bash && ros2 launch tortoisebot_slam cartographer.launch.py use_sim_time:=True"
+
+networks:
+  ros:
+    driver: bridge
