@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+
+  tortoisebot_ros2_real:
+    image: romu10/romuloperez-cp22:tortoisebot-ros2-real
+    container_name: tortoisebot_ros2_real
+    restart: "no"
+    environment:
+      - DISPLAY
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    stdin_open: true
+    tty: true
+    networks:
+      - ros
+    hostname: tortoisebot_ros2_real
+    command: bash -c "source ros2_ws/install/setup.bash && ros2 launch tortoisebot_bringup bringup.launch.py use_sim_time:=False"
+
+  tortoisebot_ros2_slam_real:
+    image: romu10/romuloperez-cp22:tortoisebot-ros2-slam-real
+    container_name: tortoisebot_ros2_slam_real
+    restart: "no"
+    environment:
+      - DISPLAY
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    stdin_open: true
+    tty: true
+    networks:
+      - ros
+    depends_on:
+      - tortoisebot_ros2_real
+    hostname: tortoisebot_ros2_slam_real 
+    command: bash -c "source ros2_ws/install/setup.bash && ros2 launch tortoisebot_bringup autobringup.launch.py use_sim_time:=False exploration:=True"
+
+networks:
+  ros:
+    driver: bridge

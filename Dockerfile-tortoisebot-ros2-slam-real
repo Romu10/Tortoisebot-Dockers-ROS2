@@ -32,7 +32,14 @@ RUN mkdir -p ros2_ws/src
 # Git clone the ROS2 Galactic repository
 WORKDIR /ros2_ws/src
 RUN git clone -b ros2-galactic --recursive https://github.com/rigbetellabs/tortoisebot.git
+
+# COLCON IGNORE pkg
+WORKDIR /ros2_ws/src/tortoisebot/tortoisebot_control
+RUN touch COLCON_IGNORE
+
+# build
 WORKDIR /ros2_ws
+RUN /bin/bash -c "source /opt/ros/galactic/setup.bash && colcon build"
 
 # replace setup.bash in ros_entrypoint.sh
 RUN sed -i 's|source "/opt/ros/\$ROS_DISTRO/setup.bash"|source "/ros2_ws/install/setup.bash"|g' /ros_entrypoint.sh
