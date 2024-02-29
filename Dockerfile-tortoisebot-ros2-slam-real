@@ -12,6 +12,8 @@ RUN set -x \
     && apt-get install -y git \
     && apt-get install ros-galactic-joint-state-publisher -y \
     && apt-get install ros-galactic-robot-state-publisher -y \
+    && apt-get install ros-galactic-cartographer -y \
+    && apt-get install ros-galactic-cartographer-ros -y \ 
     && apt-get install ros-galactic-gazebo-plugins -y \
     && apt-get install ros-galactic-teleop-twist-keyboard -y \  
     && apt-get install ros-galactic-teleop-twist-joy -y \
